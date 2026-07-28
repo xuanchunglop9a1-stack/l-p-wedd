@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hệ thống tư vấn khối xét tuyển đại học Việt Nam</title>
+  <style>
+    :root {
+      --bg: #f6f8fb;
+      --panel: #ffffff;
+      --text: #172033;
+      --muted: #667085;
+      --line: #d9e0ea;
+      --primary: #1268d6;
+      --primary-dark: #0d4f9f;
+      --green: #16835f;
+      --amber: #a15c00;
+      --red: #bd2b2b;
+      --shadow: 0 10px 30px rgba(18, 32, 51, .08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.5;
+    }
+
+    header {
+      background: #0f2747;
+      color: #fff;
+      padding: 28px 20px;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 20px;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .nav a {
+      color: #d8e7ff;
+      text-decoration: none;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    .nav a:hover { background: rgba(255, 255, 255, .12); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 22px;
+      align-items: end;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      max-width: 760px;
+      font-size: clamp(32px, 5vw, 58px);
+      line-height: 1.05;
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 720px;
+      color: #d8e7ff;
+      font-size: 17px;
+    }
+
+    .quick-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .stat {
+      background: rgba(255, 255, 255, .1);
+      border: 1px solid rgba(255, 255, 255, .18);
+      border-radius: 8px;
+      padding: 14px;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 24px;
+    }
+
+    main { padding: 24px 0 42px; }
+
+    .toolbar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    input, select, button {
+      font: inherit;
+      border-radius: 6px;
+      border: 1px solid var(--line);
+      background: #fff;
+      color: var(--text);
+    }
+
+    input, select {
+      min-height: 42px;
+      padding: 0 12px;
+      width: 100%;
+    }
+
+    button {
+      min-height: 42px;
+      padding: 0 14px;
+      cursor: pointer;
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+      font-weight: 700;
+    }
+
+    button:hover { background: var(--primary-dark); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    section {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+      margin-bottom: 18px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .section-body { padding: 16px; }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 14px;
+      background: #fff;
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0 0 10px;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      border-radius: 999px;
+      padding: 0 9px;
+      background: #edf4ff;
+      color: #164b8f;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .score-form {
+      display: grid;
+      gap: 10px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .result {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 8px;
+      background: #eef8f4;
+      border: 1px solid #b9e2d3;
+      color: #0d6045;
+      font-weight: 800;
+    }
+
+    .table-wrap { overflow-x: auto; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 620px;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 11px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      color: #475467;
+      font-size: 13px;
+      text-transform: uppercase;
+    }
+
+    .level-high { color: var(--green); font-weight: 800; }
+    .level-mid { color: var(--amber); font-weight: 800; }
+    .level-low { color: var(--red); font-weight: 800; }
+
+    .bars {
+      display: grid;
+      gap: 11px;
+    }
+
+    .bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .track {
+      height: 12px;
+      background: #edf0f5;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fill {
+      height: 100%;
+      background: linear-gradient(90deg, #1268d6, #16a37a);
+      border-radius: 999px;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 20px 0 36px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 860px) {
+      .hero, .grid, .toolbar { grid-template-columns: 1fr; }
+      .quick-stats { grid-template-columns: 1fr 1fr 1fr; }
+      .topbar { align-items: flex-start; flex-direction: column; }
+    }
+
+    @media (max-width: 560px) {
+      .quick-stats, .row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <div class="topbar">
+        <div class="brand">UniAdvisor VN</div>
+        <nav class="nav" aria-label="Điều hướng">
+          <a href="#blocks">Khối xét tuyển</a>
+          <a href="#universities">Trường</a>
+          <a href="#score">Tính điểm</a>
+          <a href="#recommend">Gợi ý</a>
+        </nav>
+      </div>
+      <div class="hero">
+        <div>
+          <h1>Hệ thống tư vấn khối xét tuyển đại học Việt Nam</h1>
+          <p>Tra cứu khối thi, ngành học, trường đại học và ước tính khả năng trúng tuyển dựa trên điểm số của thí sinh.</p>
+        </div>
+        <div class="quick-stats">
+          <div class="stat"><strong>200+</strong><span>khối xét tuyển</span></div>
+          <div class="stat"><strong>400+</strong><span>trường đại học</span></div>
+          <div class="stat"><strong>500+</strong><span>ngành đào tạo</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="toolbar">
+      <input id="searchInput" type="search" placeholder="Tìm khối, ngành, trường..." />
+      <select id="regionFilter" aria-label="Lọc khu vực">
+        <option value="all">Tất cả khu vực</option>
+        <option value="Bắc">Miền Bắc</option>
+        <option value="Trung">Miền Trung</option>
+        <option value="Nam">Miền Nam</option>
+      </select>
+    </div>
+
+    <div class="grid">
+      <div>
+        <section id="blocks">
+          <div class="section-head">
+            <h2>Khối xét tuyển nổi bật</h2>
+            <span class="meta" id="blockCount"></span>
+          </div>
+          <div class="section-body">
+            <div class="cards" id="blockCards"></div>
+          </div>
+        </section>
+
+        <section id="universities">
+          <div class="section-head">
+            <h2>Danh sách trường gợi ý</h2>
+            <span class="meta" id="universityCount"></span>
+          </div>
+          <div class="section-body table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Trường</th>
+                  <th>Khu vực</th>
+                  <th>Thế mạnh</th>
+                  <th>Điểm tham khảo</th>
+                </tr>
+              </thead>
+              <tbody id="universityRows"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="recommend">
+          <div class="section-head">
+            <h2>Ngành phù hợp</h2>
+            <span class="meta">Dựa trên dữ liệu mẫu</span>
+          </div>
+          <div class="section-body">
+            <div class="cards" id="majorCards"></div>
+          </div>
+        </section>
+      </div>
+
+      <aside>
+        <section id="score">
+          <div class="section-head">
+            <h2>Tính điểm xét tuyển</h2>
+          </div>
+          <div class="section-body">
+            <form class="score-form" id="scoreForm">
+              <div class="row">
+                <input id="subject1" type="number" min="0" max="10" step="0.01" placeholder="Môn 1" />
+                <input id="subject2" type="number" min="0" max="10" step="0.01" placeholder="Môn 2" />
+              </div>
+              <input id="subject3" type="number" min="0" max="10" step="0.01" placeholder="Môn 3" />
+              <div class="row">
+                <input id="priority" type="number" min="0" max="3" step="0.25" placeholder="Điểm ưu tiên" />
+                <select id="targetBlock">
+                  <option value="A00">A00</option>
+                  <option value="A01">A01</option>
+                  <option value="B00">B00</option>
+                  <option value="C00">C00</option>
+                  <option value="D01">D01</option>
+                </select>
+              </div>
+              <button type="submit">Tính điểm và gợi ý</button>
+            </form>
+            <div class="result" id="scoreResult">Nhập điểm để nhận kết quả.</div>
+          </div>
+        </section>
+
+        <section>
+          <div class="section-head">
+            <h2>Thống kê nhanh</h2>
+          </div>
+          <div class="section-body">
+            <div class="bars" id="chartBars"></div>
+          </div>
+        </section>
+      </aside>
+    </div>
+  </main>
+
+  <footer>
+    Prototype frontend dùng HTML, CSS và JavaScript. Có thể tách tiếp thành dự án Node.js, PHP, Python Flask và MySQL.
+  </footer>
+
+  <script>
+    const blocks = [
+      { code: "A00", subjects: "Toán, Vật lý, Hóa học", majors: ["CNTT", "Kỹ thuật", "Kinh tế"] },
+      { code: "A01", subjects: "Toán, Vật lý, Tiếng Anh", majors: ["AI", "Khoa học dữ liệu", "Logistics"] },
+      { code: "B00", subjects: "Toán, Hóa học, Sinh học", majors: ["Y khoa", "Dược", "Công nghệ sinh học"] },
+      { code: "C00", subjects: "Ngữ văn, Lịch sử, Địa lý", majors: ["Luật", "Báo chí", "Sư phạm"] },
+      { code: "D01", subjects: "Toán, Ngữ văn, Tiếng Anh", majors: ["Ngoại ngữ", "Marketing", "Quản trị kinh doanh"] }
+    ];
+
+    const universities = [
+      { name: "Đại học Bách khoa Hà Nội", region: "Bắc", strength: "Kỹ thuật, CNTT, AI", score: 27.2 },
+      { name: "Đại học Kinh tế Quốc dân", region: "Bắc", strength: "Kinh tế, Marketing, Logistics", score: 26.4 },
+      { name: "Đại học Y Hà Nội", region: "Bắc", strength: "Y khoa, Dược, Điều dưỡng", score: 28.1 },
+      { name: "Đại học Đà Nẵng", region: "Trung", strength: "Kỹ thuật, Sư phạm, Kinh tế", score: 23.5 },
+      { name: "Đại học Huế", region: "Trung", strength: "Y Dược, Luật, Ngoại ngữ", score: 22.8 },
+      { name: "Đại học Quốc gia TP.HCM", region: "Nam", strength: "CNTT, Khoa học dữ liệu, Luật", score: 26.8 },
+      { name: "Đại học Kinh tế TP.HCM", region: "Nam", strength: "Kinh tế, Tài chính, Marketing", score: 25.9 }
+    ];
+
+    const majors = [
+      { name: "Công nghệ thông tin", blocks: ["A00", "A01", "D01"], demand: 92 },
+      { name: "Trí tuệ nhân tạo", blocks: ["A00", "A01"], demand: 89 },
+      { name: "Y khoa", blocks: ["B00"], demand: 95 },
+      { name: "Marketing", blocks: ["A01", "D01"], demand: 82 },
+      { name: "Luật", blocks: ["C00", "D01"], demand: 78 },
+      { name: "Logistics", blocks: ["A00", "A01", "D01"], demand: 84 }
+    ];
+
+    const searchInput = document.querySelector("#searchInput");
+    const regionFilter = document.querySelector("#regionFilter");
+    const blockCards = document.querySelector("#blockCards");
+    const universityRows = document.querySelector("#universityRows");
+    const majorCards = document.querySelector("#majorCards");
+
+    function normalize(text) {
+      return text.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function render() {
+      const keyword = normalize(searchInput.value.trim());
+      const region = regionFilter.value;
+
+      const filteredBlocks = blocks.filter(item => {
+        const source = normalize(`${item.code} ${item.subjects} ${item.majors.join(" ")}`);
+        return !keyword || source.includes(keyword);
+      });
+
+      const filteredUniversities = universities.filter(item => {
+        const source = normalize(`${item.name} ${item.region} ${item.strength}`);
+        const matchKeyword = !keyword || source.includes(keyword);
+        const matchRegion = region === "all" || item.region === region;
+        return matchKeyword && matchRegion;
+      });
+
+      const filteredMajors = majors.filter(item => {
+        const source = normalize(`${item.name} ${item.blocks.join(" ")}`);
+        return !keyword || source.includes(keyword);
+      });
+
+      document.querySelector("#blockCount").textContent = `${filteredBlocks.length} khối`;
+      document.querySelector("#universityCount").textContent = `${filteredUniversities.length} trường`;
+
+      blockCards.innerHTML = filteredBlocks.map(item => `
+        <article class="card">
+          <h3>${item.code}</h3>
+          <p class="meta">${item.subjects}</p>
+          <div class="tags">${item.majors.map(major => `<span class="tag">${major}</span>`).join("")}</div>
+        </article>
+      `).join("");
+
+      universityRows.innerHTML = filteredUniversities.map(item => `
+        <tr>
+          <td><strong>${item.name}</strong></td>
+          <td>Miền ${item.region}</td>
+          <td>${item.strength}</td>
+          <td>${item.score.toFixed(1)}</td>
+        </tr>
+      `).join("");
+
+      majorCards.innerHTML = filteredMajors.map(item => `
+        <article class="card">
+          <h3>${item.name}</h3>
+          <p class="meta">Khối: ${item.blocks.join(", ")}</p>
+          <div class="bar-label"><span>Nhu cầu thị trường</span><strong>${item.demand}%</strong></div>
+          <div class="track"><div class="fill" style="width:${item.demand}%"></div></div>
+        </article>
+      `).join("");
+    }
+
+    function renderChart() {
+      const items = [
+        ["CNTT", 92],
+        ["Y Dược", 88],
+        ["Kinh tế", 84],
+        ["Luật", 76],
+        ["Sư phạm", 72]
+      ];
+
+      document.querySelector("#chartBars").innerHTML = items.map(([label, value]) => `
+        <div>
+          <div class="bar-label"><span>${label}</span><strong>${value}%</strong></div>
+          <div class="track"><div class="fill" style="width:${value}%"></div></div>
+        </div>
+      `).join("");
+    }
+
+    function classifyChance(score, benchmark) {
+      if (score >= benchmark + 1) return ["Cao", "level-high"];
+      if (score >= benchmark - 1) return ["Cân nhắc", "level-mid"];
+      return ["Thấp", "level-low"];
+    }
+
+    document.querySelector("#scoreForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const values = ["#subject1", "#subject2", "#subject3", "#priority"].map(id => Number(document.querySelector(id).value || 0));
+      const total = values.reduce((sum, value) => sum + value, 0);
+      const block = document.querySelector("#targetBlock").value;
+      const matchedMajors = majors.filter(item => item.blocks.includes(block)).map(item => item.name).join(", ");
+      const benchmark = universities.reduce((sum, item) => sum + item.score, 0) / universities.length;
+      const [chance, className] = classifyChance(total, benchmark);
+
+      document.querySelector("#scoreResult").innerHTML = `
+        Tổng điểm: ${total.toFixed(2)}<br>
+        Khả năng trúng tuyển trung bình: <span class="${className}">${chance}</span><br>
+        Ngành nên xem: ${matchedMajors || "Chưa có dữ liệu"}
+      `;
+    });
+
+    searchInput.addEventListener("input", render);
+    regionFilter.addEventListener("change", render);
+
+    render();
+    renderChart();
+  </script>
+</body>
+</html>
